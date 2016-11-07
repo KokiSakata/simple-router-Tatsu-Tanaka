@@ -162,7 +162,7 @@ RoutingTableクラス内ですでに用意されているaddメソッドに加�
 * ルーティングテーブルの表示
 * ルーティングテーブルの削除
 * ルーティングテーブルの表示
-```ruby
+```
 ensyuu2@ensyuu2-VirtualBox:~/simple-router-Tatsu-Tanaka$ ./bin/simple_router addTable 192.168.1.0 24 192.168.1.1
 ensyuu2@ensyuu2-VirtualBox:~/simple-router-Tatsu-Tanaka$ ./bin/simple_router printTable
 routing table
