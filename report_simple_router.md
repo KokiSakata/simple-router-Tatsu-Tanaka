@@ -256,4 +256,4 @@ port | mac address  	 | ip address/netmask
 
 ##参考文献
 - デビッド・トーマス+アンドリュー・ハント(2001)「プログラミング Ruby」ピアソン・エデュケーション.  
-- [テキスト: 7章 "すべての基本、ラーニングスイッチ"](http://yasuhito.github.io/trema-book/#learning_switch)  
+- [テキスト: 13章 "ルータ (後編)"](http://yasuhito.github.io/trema-book/#router_part2)  
