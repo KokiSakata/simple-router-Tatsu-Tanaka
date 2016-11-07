@@ -1,0 +1,84 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'bundler'
+Bundler.setup :default
+
+require 'gli'
+require 'trema'
+
+# simple_router command
+module SimpleRouterApp
+  extend GLI::App
+
+  include Pio
+  desc 'Prints routing tabel'
+  arg_name '@routung_table'
+  command :printTable do |c|
+    c.desc 'Location to find socket files'
+    c.flag [:S, :socket_dir], default_value: Trema::DEFAULT_SOCKET_DIR
+
+    c.action do |_global_options, options, args|
+      print "routing table\n"
+      print "=========================================\n"
+      print "Destination/netmask | Next hop\n"
+      print "-----------------------------------------\n"
+      @routung_table = Trema.trema_process('SimpleRouter', options[:socket_dir]).controller.return_table()
+      @routung_table.each do |each|
+        each.each_key do |key|
+          print IPv4Address.new(key).to_s, "/", @routung_table.index(each), "\t    | ",each[key].to_s, "\n"
+        end
+      end
+      print "=========================================\n"
+    end
+  end
+
+  desc 'add routing tabel'
+  arg_name 'destination netmask nexthop'
+  command :addTable do |c|
+    c.desc 'Location to find socket files'
+    c.flag [:S, :socket_dir], default_value: Trema::DEFAULT_SOCKET_DIR
+
+    c.action do |_global_options, options, args|
+      destination = args[0]
+      netmask = args[1]
+      nexthop = args[2]
+      Trema.trema_process('SimpleRouter', options[:socket_dir]).controller.add_routing_tabel(destination, netmask, nexthop)
+    end
+  end
+
+  desc 'delete routing tabel'
+  arg_name 'destination netmask'
+  command :deleteTable do |c|
+    c.desc 'Location to find socket files'
+    c.flag [:S, :socket_dir], default_value: Trema::DEFAULT_SOCKET_DIR
+
+    c.action do |_global_options, options, args|
+      destination = args[0]
+      netmask = args[1]
+      Trema.trema_process('SimpleRouter', options[:socket_dir]).controller.delete_routing_tabel(destination, netmask)
+    end
+  end
+
+  desc 'Prints interface'
+  arg_name 'interface'
+  command :printInterface do |c|
+    c.desc 'Location to find socket files'
+    c.flag [:S, :socket_dir], default_value: Trema::DEFAULT_SOCKET_DIR
+
+    c.action do |_global_options, options, args|
+      print "interface list\n"
+      print "=============================================\n"
+      print "port | mac address  \t | ip address/netmask\n"
+      print "---------------------------------------------\n"
+      interface = Trema.trema_process('SimpleRouter', options[:socket_dir]).controller.return_interface()
+      interface.each do |each|
+        print each[:port_number].to_s,"    | ", each[:mac_address], " | ", each[:ip_address]+"/"+each[:netmask_length].to_s,"\n"
+      end
+      print "=============================================\n"
+    end
+  end
+
+
+  exit run(ARGV)
+end
