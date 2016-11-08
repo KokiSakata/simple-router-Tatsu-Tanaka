@@ -254,6 +254,24 @@ port | mac address  	 | ip address/netmask
 ```
 正しく実装できていることを確認できた。
 
+## 課題メモ
+Simple_routerを実行するために端末上で、
+```
+./bin/trema run ./lib/simple_router.rb -c trema.conf
+```
+と入力すると、
+```
+Cannot not create namespace file "/var/run/netns/host1": File exists
+/home/ensyuu2/.rvm/gems/ruby-2.2.5/gems/phut-0.7.5/lib/phut/shell_runner.rb:5:in `sh': sudo ip netns add host1 failed. (RuntimeError)
+```
+と端末に表示され、実行することができないエラーがあった。
+高宮先生に質問したところ、host1というネットワークネームスペースが残っていることが原因であり、
+```
+sudo ip netns delete host1
+```
+と端末に入力することにより解決した。
+今後のために、メモとして本レポートに記述しておく。
+
 ##参考文献
 - デビッド・トーマス+アンドリュー・ハント(2001)「プログラミング Ruby」ピアソン・エデュケーション.  
 - [テキスト: 13章 "ルータ (後編)"](http://yasuhito.github.io/trema-book/#router_part2)  
